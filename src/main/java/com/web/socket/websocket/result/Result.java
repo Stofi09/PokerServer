@@ -100,6 +100,8 @@ public  void setPlayerResult(Player player) {
 //Player2 == 2
 public static String checkWinner(Player player1, Player player2) {
 	String result = "draw";
+	System.out.println("inside cw");
+	System.out.println(player1.toString() + "|||" + player2.toString());
 	System.out.println(player1.getHigherCard() + "//// " + player1.getLesserCard());
 	System.out.println(player2.getHigherCard() + "//// " + player2.getLesserCard());
 	if (player1.getResult1() > player2.getResult1()) result = player1.getName();

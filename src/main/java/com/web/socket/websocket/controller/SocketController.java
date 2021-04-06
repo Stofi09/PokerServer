@@ -30,7 +30,11 @@ public class SocketController {
 	private Result res;
 	@Autowired
 	private static Game game;
-	
+	@Autowired
+	private Player player;
+	@Autowired
+	private Player player2;
+
 
     @MessageMapping("/Join")
     @SendTo("/topic/user")
@@ -40,12 +44,12 @@ public class SocketController {
     	System.out.println(sessionId);
     	if(game == null ) {
     		game = new Game();
-    		
+    	//	player = new Player(message.getName(),1000,sessionId);
     		game.setPlayer(message.getName(),1000,sessionId);
     		System.out.println(message.getName() + " " + sessionId);
     		message.setCredit(1000);
     	}else {
-    		
+    	//	player2 = new Player(message.getName(),1000,sessionId);
     		game.setPlayer(message.getName(),1000,sessionId);
     		message.setOppName(game.getOpponentName(message.getName()));
     		System.out.println(message.getName() + " " + sessionId);
@@ -77,30 +81,26 @@ public class SocketController {
         	return message;
     	}else {
     		
-    	Player player = new Player();
-    	Player player2 = new Player();
-    	
     	game.nullTurn();
     	turn = game.turnCounter();
-    	
     	System.out.println(player.getName() + " and " + player2.getName());
     	ArrayList<Card> deck = new ArrayList<>();
 		deck = Card.makeDeck();
 		Collections.shuffle(deck);
-		
+		player = new Player(game.getPlayer1().getName());
 		this.res.setResult(deck.get(0),deck.get(1),deck.get(4),deck.get(5), deck.get(6), deck.get(7), deck.get(8));
 		this.res.checkBooleans();
 		this.res.setPlayerResult(player);
 		System.out.println(player.toString2() );
 		System.out.println("-------------------");
-		
+		player2 = new Player(game.getPlayer2().getName());
 		this.res.setResult(deck.get(2),deck.get(3),deck.get(4),deck.get(5), deck.get(6), deck.get(7), deck.get(8));		
 		this.res.checkBooleans();
 		this.res.setPlayerResult(player2);
-//		System.out.println("\\//\\//\\//\\//\\//\\//"+ this.res1.toString2() + "" + this.res2.toString2());
+		System.out.println(player2.toString2() );
 		System.out.println(player.toString2() + " and " + player2.toString2());
 		
-		message.setResult(this.res.checkWinner(player, player2));
+		message.setResult(Result.checkWinner(player, player2));
 		
 		System.out.println(message.getResult());
 		int[] cards = {deck.get(0).getId(),deck.get(1).getId(),deck.get(2).getId(),deck.get(3).getId(),deck.get(4).getId(),deck.get(5).getId(),deck.get(6).getId(),deck.get(7).getId(),deck.get(8).getId()};

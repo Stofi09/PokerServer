@@ -27,6 +27,10 @@ public class Player {
 	private boolean hasTurned;
 	
 	public Player() {}
+	public Player(String name) {
+		this.name = name;
+	}
+	
 	public Player(String name, int credit,String id) {
 		this.name = name;
 		this.credit = credit;
