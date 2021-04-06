@@ -59,20 +59,28 @@ public class Game implements iGame{
 		//players.get(name).setHasTurned(true);
 	}
 
-	// Sets player at the start of a game.
+	// Sets the players at the start of a game.
 	@Override
-	public void setPlayer(Player player) {
+	public void setPlayer(String name, int credit,String id) {
 		if (player1 == null) {
-			this.player1 = player;
-			players.put("player1", this.player1);
+			this.player1 = new Player( name,  credit, id);
+			players.put(player1.getId(), this.player1);
 		}
 		else {
-			this.player2 = player;
-			players.put("player2", this.player2);
+			this.player2 = new Player( name,  credit, id);
+			players.put(player2.getId(), this.player2);
 		}
 		
 	}
-
+	public String getOpponentName(String name) {
+		String result = "undefined";
+		if (name.equals(this.player1.getName())){
+			result = this.player2.getName();
+		} else if(name.equals(this.player2.getName())) {
+			result = this.player1.getName();
+		}
+		return result;
+	}
 	// Do I need a failsafe here?
 	public void setPlayersHand() {
 		this.player1.setHand(deck1.get(0), deck1.get(1));
@@ -120,6 +128,7 @@ public class Game implements iGame{
 		deck1 = deck;
 	}
 
+
 	@Override
 	public void nullDeck() {
 		deck1.clear();
@@ -132,6 +141,19 @@ public class Game implements iGame{
 		setBoardCredit(credit);
 		
 		
+	}
+	public void checkPlayerId(String playerId) {
+		if (playerId.equals(this.player1.getId())){
+			this.player1 = null;
+		}else if (playerId.equals(this.player2.getId())) {
+			this.player2 = null;
+		}else {
+			System.err.println("The string id is not equal to any of the existing players.");
+		}
+	}
+	public void nullPlayer(String playerId) {
+		players.remove(playerId);
+		checkPlayerId(playerId);
 	}
 	
 	public int getPlayersSize() {

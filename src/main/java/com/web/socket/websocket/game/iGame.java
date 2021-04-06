@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public interface iGame {
 	
 	// At the beginning of a game the class Game needs players
-	public void setPlayer(Player player);
+	public void setPlayer(String name, int credit,String id);
 	// Check whether there are enough players
 	public boolean numOfPlayers();
 	//Turns are true or not

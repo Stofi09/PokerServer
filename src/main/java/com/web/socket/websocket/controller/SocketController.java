@@ -30,10 +30,7 @@ public class SocketController {
 	private Result res;
 	@Autowired
 	private static Game game;
-	@Autowired
-	private Player player;
-	@Autowired
-	private Player player2;
+	
 
     @MessageMapping("/Join")
     @SendTo("/topic/user")
@@ -43,17 +40,17 @@ public class SocketController {
     	System.out.println(sessionId);
     	if(game == null ) {
     		game = new Game();
-    		player = new Player(message.getName(),1000,sessionId);
-    		game.setPlayer(player);
-    		System.out.println(player.toString());
-    		message.setCredit(player.getCredit());
+    		
+    		game.setPlayer(message.getName(),1000,sessionId);
+    		System.out.println(message.getName() + " " + sessionId);
+    		message.setCredit(1000);
     	}else {
-    		player2 = new Player(message.getName(),1000,sessionId);
-    		game.setPlayer(player2);
-    		message.setOppName(player.getName());
-    		System.out.println(player2.toString());
-    		message.setCredit(player2.getCredit());
-    		message.setOppCredit(player.getCredit());
+    		
+    		game.setPlayer(message.getName(),1000,sessionId);
+    		message.setOppName(game.getOpponentName(message.getName()));
+    		System.out.println(message.getName() + " " + sessionId);
+    		message.setCredit(1000);
+    		message.setOppCredit(1000);
     	}
     	
     	
@@ -79,8 +76,13 @@ public class SocketController {
     		message.setType("otherLeft");
         	return message;
     	}else {
+    		
+    	Player player = new Player();
+    	Player player2 = new Player();
+    	
     	game.nullTurn();
     	turn = game.turnCounter();
+    	
     	System.out.println(player.getName() + " and " + player2.getName());
     	ArrayList<Card> deck = new ArrayList<>();
 		deck = Card.makeDeck();
@@ -194,7 +196,10 @@ public class SocketController {
     	return message;}
     }
     
-    
+    public void removePlayer(String id) {
+    	game.nullPlayer(id);
+    	
+    }
     public static void setHasDisconnectedToTrue() {
     	hasDisconnected = true;
     }
