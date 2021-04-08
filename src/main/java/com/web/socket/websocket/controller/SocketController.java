@@ -47,7 +47,6 @@ public class SocketController {
     	}if (game.getPlayer1() == null) {
     	//	player = new Player(message.getName(),1000,sessionId);
     		game.setPlayer(message.getName(),1000,sessionId);
-    		System.out.println(message.getName() + " " + sessionId);
     		message.setId(sessionId);
     		message.setCredit(1000);
     		message.setType("Join");
@@ -55,19 +54,18 @@ public class SocketController {
     	//	player2 = new Player(message.getName(),1000,sessionId);
     		game.setPlayer(message.getName(),1000,sessionId);
     		message.setOppName(game.getPlayer1().getName());
-    		System.out.println(message.getOppName());
-    		System.out.println(message.getName() + " " + sessionId );
     		message.setId(sessionId);
     		message.setCredit(1000);
     		message.setOppCredit(1000);
     		message.setType("Join");
     	}else {
     		System.err.println("there are 2 players already");
-    		message.setType("3rdPlayer");
+    		message.setName("There are already two players playing. Please wait until they finish.");
+			message.setType("reloadPage");
     	}
     	if (game.getPlayer1() != null && game.getPlayer2() != null) {
-    		System.out.println("lefutott");
     		if (game.getPlayer1().getName().equals(game.getPlayer2().getName())) {
+    			message.setName("There are already two players playing. Please wait until they finish.");
     			message.setType("reloadPage");
     		}
     	}
