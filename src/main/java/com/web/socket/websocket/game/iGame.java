@@ -11,7 +11,7 @@ public interface iGame {
 	// At the beginning of a game the class Game needs players
 	public void setPlayer(String name, int credit,String id);
 	// Check whether there are enough players
-	public boolean numOfPlayers();
+	public boolean numOfPlayersIsTwo();
 	//Turns are true or not
 	public boolean hasTurned();
 	//Set deck at the start of every game

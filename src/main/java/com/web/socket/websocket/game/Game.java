@@ -23,8 +23,6 @@ public class Game implements iGame{
 	private int turn;
 	public Game() {}
 	
-	// Can I init. later?
-	private HashMap<String, Player> players = new HashMap<>();
 	
 	public void setRaiseTurned(String name) {
 		if (name.equals(this.player1.getName())) {
@@ -64,21 +62,26 @@ public class Game implements iGame{
 	public void setPlayer(String name, int credit,String id) {
 		if (player1 == null) {
 			this.player1 = new Player( name,  credit, id);
-			players.put(player1.getId(), this.player1);
+			System.out.println("player1 has been set."+ "" + player1.toString());
 		}
-		else {
+		else if (player2 == null){
 			this.player2 = new Player( name,  credit, id);
-			players.put(player2.getId(), this.player2);
+			System.out.println("player2 has been set." + "" + player2.toString());
+		}else {
+			System.out.println("Something went wrong calling setPlayer from class Game.");
 		}
 		
 	}
 	public String getOpponentName(String name) {
 		String result = "undefined";
-		if (name.equals(this.player1.getName())){
-			result = this.player2.getName();
-		} else if(name.equals(this.player2.getName())) {
-			result = this.player1.getName();
-		}
+		System.out.println("inside getoppn.: " + "" + name );
+//		if (name.equals(this.player1.getName())){
+//			result = this.player2.getName();
+//		} 
+//		else if(name.equals(this.player2.getName())) {
+//			result = this.player1.getName();
+//		}
+		result = this.player1.getName();
 		return result;
 	}
 	// Do I need a failsafe here?
@@ -86,12 +89,15 @@ public class Game implements iGame{
 		this.player1.setHand(deck1.get(0), deck1.get(1));
 		this.player2.setHand(deck1.get(2), deck1.get(3));
 	}
+	
 	// If it gives back true, the game can start.
 	@Override
-	public boolean numOfPlayers() {
-		int playersNum = players.size();
-		if (playersNum == numOfPlayerNeeded)	return true;
-		else 	return false;
+	public boolean numOfPlayersIsTwo() {
+		if (this.player1 != null && this.player2 != null) {
+			return  true;
+		}else {
+			return  false;
+		}
 	}
 	public int turnRaiseCounter() {
 		
@@ -142,22 +148,19 @@ public class Game implements iGame{
 		
 		
 	}
-	public void checkPlayerId(String playerId) {
-		if (playerId.equals(this.player1.getId())){
-			this.player1 = null;
-		}else if (playerId.equals(this.player2.getId())) {
-			this.player2 = null;
-		}else {
-			System.err.println("The string id is not equal to any of the existing players.");
+	public void nullPlayerId(String playerId) {
+		if (this.player1 != null) {
+			if (playerId.equals(this.player1.getId())){
+				this.player1 = null;
+				System.out.println("player1 has been removed");
+			}
 		}
-	}
-	public void nullPlayer(String playerId) {
-		players.remove(playerId);
-		checkPlayerId(playerId);
-	}
-	
-	public int getPlayersSize() {
-		return players.size();
+		if(this.player2 != null) {
+			 if (playerId.equals(this.player2.getId())) {
+				this.player2 = null;
+				System.out.println("player2 has been removed");
+			}
+		}
 	}
 	
 	@Override

@@ -34,8 +34,8 @@ public class SocketController {
 	private Player player;
 	@Autowired
 	private Player player2;
-
-
+	
+	
     @MessageMapping("/Join")
     @SendTo("/topic/user")
     public MessageBean sendToAll(@Payload MessageBean message , @Header("simpSessionId") String sessionId) {
@@ -44,22 +44,36 @@ public class SocketController {
     	System.out.println(sessionId);
     	if(game == null ) {
     		game = new Game();
+    	}if (game.getPlayer1() == null) {
     	//	player = new Player(message.getName(),1000,sessionId);
     		game.setPlayer(message.getName(),1000,sessionId);
     		System.out.println(message.getName() + " " + sessionId);
+    		message.setId(sessionId);
     		message.setCredit(1000);
-    	}else {
+    		message.setType("Join");
+    	}else if (game.getPlayer2() == null){
     	//	player2 = new Player(message.getName(),1000,sessionId);
     		game.setPlayer(message.getName(),1000,sessionId);
-    		message.setOppName(game.getOpponentName(message.getName()));
-    		System.out.println(message.getName() + " " + sessionId);
+    		message.setOppName(game.getPlayer1().getName());
+    		System.out.println(message.getOppName());
+    		System.out.println(message.getName() + " " + sessionId );
+    		message.setId(sessionId);
     		message.setCredit(1000);
     		message.setOppCredit(1000);
+    		message.setType("Join");
+    	}else {
+    		System.err.println("there are 2 players already");
+    		message.setType("3rdPlayer");
+    	}
+    	if (game.getPlayer1() != null && game.getPlayer2() != null) {
+    		System.out.println("lefutott");
+    		if (game.getPlayer1().getName().equals(game.getPlayer2().getName())) {
+    			message.setType("reloadPage");
+    		}
     	}
     	
+    	System.out.println(message.getBean());
     	
-    	
-    	message.setType("Join");
         return message;
     }
     
@@ -83,7 +97,6 @@ public class SocketController {
     		
     	game.nullTurn();
     	turn = game.turnCounter();
-    	System.out.println(player.getName() + " and " + player2.getName());
     	ArrayList<Card> deck = new ArrayList<>();
 		deck = Card.makeDeck();
 		Collections.shuffle(deck);
@@ -196,9 +209,11 @@ public class SocketController {
     	return message;}
     }
     
-    public void removePlayer(String id) {
-    	game.nullPlayer(id);
-    	
+    public static void removePlayer(String id) {
+    	System.out.println("Player is beeing removed: " + "" + id);
+    	if (game != null) {
+    		game.nullPlayerId(id);
+    	}
     }
     public static void setHasDisconnectedToTrue() {
     	hasDisconnected = true;
