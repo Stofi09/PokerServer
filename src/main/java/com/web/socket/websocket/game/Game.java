@@ -75,13 +75,12 @@ public class Game implements iGame{
 	public String getOpponentName(String name) {
 		String result = "undefined";
 		System.out.println("inside getoppn.: " + "" + name );
-//		if (name.equals(this.player1.getName())){
-//			result = this.player2.getName();
-//		} 
-//		else if(name.equals(this.player2.getName())) {
-//			result = this.player1.getName();
-//		}
-		result = this.player1.getName();
+		if (name.equals(this.player1.getName())){
+			result = this.player2.getName();
+		} 
+		else if(name.equals(this.player2.getName())) {
+			result = this.player1.getName();
+		}
 		return result;
 	}
 	// Do I need a failsafe here?

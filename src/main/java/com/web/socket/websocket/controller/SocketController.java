@@ -92,19 +92,27 @@ public class SocketController {
     		message.setType("otherLeft");
         	return message;
     	}else {
+    		//change the player cards? The player who starts the game should receive deck.get0 and 1
     		
+    	// Null the game turn at the end of the game	
     	game.nullTurn();
     	turn = game.turnCounter();
+    	
+    	// keep the deck array- just shuffle if its not the first game
     	ArrayList<Card> deck = new ArrayList<>();
 		deck = Card.makeDeck();
 		Collections.shuffle(deck);
-		player = new Player(game.getPlayer1().getName());
+		
+		player = new Player(message.getName());
+		System.out.println("///|||\\"+player.getName());
+		//these 3 methods could be just one.
 		this.res.setResult(deck.get(0),deck.get(1),deck.get(4),deck.get(5), deck.get(6), deck.get(7), deck.get(8));
 		this.res.checkBooleans();
 		this.res.setPlayerResult(player);
 		System.out.println(player.toString2() );
 		System.out.println("-------------------");
-		player2 = new Player(game.getPlayer2().getName());
+		player2 = new Player(game.getOpponentName(message.getName()));
+		System.out.println("///|||\\"+player2.getName());
 		this.res.setResult(deck.get(2),deck.get(3),deck.get(4),deck.get(5), deck.get(6), deck.get(7), deck.get(8));		
 		this.res.checkBooleans();
 		this.res.setPlayerResult(player2);
